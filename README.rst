@@ -26,7 +26,9 @@ Basic example:
     from django.db import models
     from dynamic_names import FilePattern
 
-    upload_to_pattern = FilePattern('{app_name:.25}/{model_name:.30}/{uuid_base32}{ext}')
+    upload_to_pattern = FilePattern(
+        filename_pattern='{app_name:.25}/{model_name:.30}/{uuid:base32}{ext}'
+    )
 
     class FileModel(models.Model):
         my_file = models.FileField(upload_to=upload_to_pattern)
@@ -34,20 +36,12 @@ Basic example:
 
 Auto slug example:
 
-.. code-block:: python
 
-    from django.db import models
-    from dynamic_names import FilePattern
+Features
+--------
 
-    class SlugPattern(FilePattern):
-        filename_pattern = '{app_name:.25}/{model_name:.30}/{slug}{ext}'
-
-    class FileModel(models.Model):
-        title = models.CharField(max_length=100)
-        my_file = models.FileField(upload_to=SlugPattern(populate_slug_from='title'))
-
-Supported Attributes
---------------------
+Field names
+~~~~~~~~~~~
 
 ``ext``
     File extension including the dot.
@@ -61,19 +55,58 @@ Supported Attributes
 ``app_label``
     App label of the Django model.
 
-``uuid_base16``
-    Base16 (hex) representation of a UUID.
+``instance``
+    Instance of the model before it has been saved. You may not have a primary
+    key at this point.
 
-``uuid_base32``
-    Base32 representation of a UUID.
+``uuid``
+    UUID version 4 that supports multiple type specifiers. The UUID will be
+    the same should you use it twice in the same string, but different on each
+    invocation of the ``upload_to`` callable.
 
-``uuid_base64``
-    Base64 representation of a UUID. Not supported by all file systems.
+    The type specifiers allow you to format the UUID in different ways, e.g.
+    ``{uuid:x}`` will give you a with a hexadecimal UUID.
 
-``slug``
-    Auto created slug based on another field on the model instance.
+    The supported type specifiers are:
 
-``slug_from``
-    Name of the field the slug should be populated from.
+    ``s``
+        String representation of a UUID including dashes.
 
-    .. note:: The field name itself is not part of the pattern.
+    ``i``
+        Integer representation of a UUID. Like to ``UUID.int``.
+
+    ``x``
+        Hexadecimal (Base16) representation of a UUID. Like to ``UUID.hex``.
+
+    ``X``
+        Upper case hexadecimal representation of a UUID. Like to
+        ``UUID.hex``.
+
+    ``base32``
+        Base32 representation of a UUID without padding.
+
+    ``base64``
+        Base64 representation of a UUID without padding.
+
+        .. warning:: Not all file systems support Base64 file names.
+
+Type specifiers
+~~~~~~~~~~~~~~~
+
+You can also use a special slug type specifier, that slugifies strings.
+
+Example:
+
+.. code-block:: python
+
+    from django.db import models
+    from dynamic_names import FilePattern
+
+    upload_to_pattern = FilePattern(
+        filename_pattern='{app_name:.25}/{model_name:.30}/{instance.title:slug}{ext}'
+    )
+
+    class FileModel(models.Model):
+        title = models.CharField(max_length=100)
+        my_file = models.FileField(upload_to=upload_to_pattern)
+

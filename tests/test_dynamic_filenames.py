@@ -1,9 +1,10 @@
 import uuid
 
+import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 
-from dynamic_filenames import FilePattern
+from dynamic_filenames import FilePattern, ExtendedUUID
 from tests.testapp.models import DefaultModel
 
 
@@ -11,7 +12,7 @@ class FixedUUIDFilePattern(FilePattern):
 
     @staticmethod
     def get_uuid():
-        return uuid.UUID('522d6f3519204b0fb82ae8f558af2749')
+        return ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
 
 
 class TestFilePattern:
@@ -19,12 +20,6 @@ class TestFilePattern:
     def test_init(self):
         assert FilePattern().kwargs == {}
         assert FilePattern().override_values == {}
-
-        assert FilePattern(slug_from='title').kwargs == {'slug_from': 'title'}
-        assert FilePattern(slug_from='title').override_values == {}
-
-        assert FilePattern(slug_from='title').kwargs == {'slug_from': 'title'}
-        assert FilePattern(slug_from='title').override_values == {}
 
         assert FilePattern(path='sth').kwargs == {'path': 'sth'}
         assert FilePattern(path='sth').override_values == {'path': 'sth'}
@@ -53,23 +48,38 @@ class TestFilePattern:
             instance=DefaultModel(), filename='other_file.txt'
         ) == 'my_file.txt'
 
+    def test_call__uuid(self):
+        assert FixedUUIDFilePattern(filename_pattern='{uuid}{ext}')(
+            instance=DefaultModel(), filename='other_file.txt'
+        ) == '522d6f35-1920-4b0f-b82a-e8f558af2749.txt'
+
+    def test_call__uuid_str(self):
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:s}{ext}')(
+            instance=DefaultModel(), filename='other_file.txt'
+        ) == '522d6f35-1920-4b0f-b82a-e8f558af2749.txt'
+
     def test_call__uuid_base10(self):
-        assert FixedUUIDFilePattern(filename_pattern='{uuid_base10}{ext}')(
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:i}{ext}')(
             instance=DefaultModel(), filename='other_file.txt'
         ) == '109232604567331952752042348453722793801.txt'
 
-    def test_call__uuid_base16(self):
-        assert FixedUUIDFilePattern(filename_pattern='{uuid_base16}{ext}')(
+    def test_call__uuid_hex_lower(self):
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:x}{ext}')(
             instance=DefaultModel(), filename='other_file.txt'
         ) == '522d6f3519204b0fb82ae8f558af2749.txt'
 
+    def test_call__uuid_hex_upper(self):
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:X}{ext}')(
+            instance=DefaultModel(), filename='other_file.txt'
+        ) == '522D6F3519204B0FB82AE8F558AF2749.txt'
+
     def test_call__uuid_base32(self):
-        assert FixedUUIDFilePattern(filename_pattern='{uuid_base32}{ext}')(
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:base32}{ext}')(
             instance=DefaultModel(), filename='other_file.txt'
         ) == 'KIWW6NIZEBFQ7OBK5D2VRLZHJE.txt'
 
     def test_call__uuid_base64(self):
-        assert FixedUUIDFilePattern(filename_pattern='{uuid_base64}{ext}')(
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:base64}{ext}')(
             instance=DefaultModel(), filename='other_file.txt'
         ) == 'Ui1vNRkgSw-4Kuj1WK8nSQ.txt'
 
@@ -89,45 +99,64 @@ class TestFilePattern:
         ) == 'special_name.txt'
 
     def test_call__slug(self):
-        assert FilePattern(slug_from='title', filename_pattern='{slug}{ext}')(
+        assert FilePattern(filename_pattern='{instance.title:slug}{ext}')(
             instance=DefaultModel(title='best model'), filename='some_file.txt'
         ) == 'best-model.txt'
 
     def test_destruct(self):
         assert FilePattern().deconstruct() == ('dynamic_filenames.FilePattern', [], {})
-        assert FilePattern(slug_from='title').deconstruct() == (
-            'dynamic_filenames.FilePattern', [], {'slug_from': 'title'})
+        assert FilePattern(filename_pattern='{name}{ext}').deconstruct() == (
+            'dynamic_filenames.FilePattern', [], {'filename_pattern': '{name}{ext}'})
         assert FilePattern(name='sth').deconstruct() == (
             'dynamic_filenames.FilePattern', [], {'name': 'sth'})
 
     def test_uuid(self):
         assert isinstance(FilePattern.get_uuid(), uuid.UUID), "type uuid.UUID expected"
         assert FilePattern.get_uuid().hex[12] == '4', "UUID version 4 expected"
+        assert FixedUUIDFilePattern(filename_pattern='{uuid:x}{ext}')(
+            instance=DefaultModel(title='best model'), filename='some_file.txt'
+        ) == '522d6f3519204b0fb82ae8f558af2749.txt'
+
+
+class TestExtendedUUID:
 
     def test_uuid_2_base10(self):
-        guid = uuid.UUID('522d6f3519204b0fb82ae8f558af2749')
-        assert isinstance(FilePattern.uuid_2_base10(guid), int)
-        assert len(str(FilePattern.uuid_2_base10(guid))) == 39
-        assert FilePattern.uuid_2_base10(guid) == 109232604567331952752042348453722793801
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert isinstance(format(guid, 'i'), str)
+        assert len(format(guid, 'i')) == 39
+        assert format(guid, 'i') == '109232604567331952752042348453722793801'
 
-    def test_uuid_2_base16(self):
-        guid = uuid.UUID('522d6f3519204b0fb82ae8f558af2749')
-        assert isinstance(FilePattern.uuid_2_base16(guid), str)
-        assert len(str(FilePattern.uuid_2_base16(guid))) == 32
-        assert FilePattern.uuid_2_base16(guid) == '522d6f3519204b0fb82ae8f558af2749'
+    def test_uuid_2_base16_lower(self):
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert isinstance(format(guid, 'x'), str)
+        assert len(format(guid, 'x')) == 32
+        assert format(guid, 'x') == '522d6f3519204b0fb82ae8f558af2749'
+
+    def test_uuid_2_base16_upper(self):
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert isinstance(format(guid, 'X'), str)
+        assert len(format(guid, 'X')) == 32
+        assert format(guid, 'X') == '522D6F3519204B0FB82AE8F558AF2749'
 
     def test_uuid_2_base32(self):
-        guid = uuid.UUID('522d6f3519204b0fb82ae8f558af2749')
-        assert isinstance(FilePattern.uuid_2_base32(guid), str)
-        assert len(str(FilePattern.uuid_2_base32(guid))) == 26
-        assert FilePattern.uuid_2_base32(guid) == 'KIWW6NIZEBFQ7OBK5D2VRLZHJE'
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert isinstance(format(guid, 'base32'), str)
+        assert len(format(guid, 'base32')) == 26
+        assert '=' not in format(guid, 'base32'), "Trim padding"
+        assert format(guid, 'base32') == 'KIWW6NIZEBFQ7OBK5D2VRLZHJE'
 
     def test_uuid_2_base64(self):
-        guid = uuid.UUID('522d6f3519204b0fb82ae8f558af2749')
-        assert isinstance(FilePattern.uuid_2_base64(guid), str)
-        assert len(str(FilePattern.uuid_2_base64(guid))) == 22
-        assert '=' not in FilePattern.uuid_2_base64(guid), "Trim padding"
-        assert FilePattern.uuid_2_base64(guid) == 'Ui1vNRkgSw-4Kuj1WK8nSQ'
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert isinstance(format(guid, 'base64'), str)
+        assert len(format(guid, 'base64')) == 22
+        assert '=' not in format(guid, 'base64'), "Trim padding"
+        assert format(guid, 'base64') == 'Ui1vNRkgSw-4Kuj1WK8nSQ'
+
+    def test_uuid__super(self):
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        with pytest.raises(TypeError) as e:
+            format(guid, 'does not exist')
+        assert 'unsupported format string passed to ExtendedUUID.__format__' in str(e)
 
 
 def test_migrations(db):
