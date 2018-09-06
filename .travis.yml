@@ -1,0 +1,22 @@
+language: python
+sudo: required
+dist: xenial
+python: 3.7
+cache: pip
+env:
+  matrix:
+  - TOXENV=django-slugify
+  - TOXENV=unicode-slugify
+install: pip install -U pip tox codecov
+script: tox -e $TOXENV
+after_success: codecov
+deploy:
+  provider: pypi
+  user: codingjoe
+  password:
+    secure: dfstvb+TXu32T3rAaHITddoMmYYfNWGVVyfyNyjq8vHigawJKieUNHmy9UKqP5Wb8gHaw8O/zpqodYVAt+8JvYfxALEGJBOSOE3E8KPqNZBgQbwutC7vvna+Sz+f/H4OGLWY+YWm54rujB2J/eSqlG4NV/6fePebMy0wq+mGqYWYfrH4KMTwG3oYZfmEDZcMD55lFSKxryHzlq3C5eibtq+iLTolKE+r1QlazMw07TADsboFDigAHmDPRuZJvhfzfkY+3V3rkoiaHXtpN8m386nokqpMSfeEO5BXjod80yRvvtNWGH1x2N19mWf3YZAhBovGqkZR0ezVc9ho60z9+aTUGLcVhbRWqsUob8nQ0KqsepeldLAaopDb/TgCEJmOMjBCD0NH+Q/d1UVtFi/MUguxKyC+Kbi1/3qx/8ArELw74rTJURDHIRqIUB0wX3pzIu24U2pV0uII1DECn5dfVE2RZwbqnt/+JVIUA8pWoAd8VWilCGHm0NfHhMfplPwbSYhbWyCgCnwzAfScvZQOtzquEX+kbXB7BK89kFIICOueh1IASxn2WTxEj+8QNNhe1PnznGmA+bOKtEmEkhE65n606Q9WSwKGiyLLDgrqC3tGxeQmEHYaIds3Ali3ayRbMlSwlSH90NrXmh1zoK8TLHGSO01fAm4SBfHnQDEJSwM=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: codingjoe/django-dynamic-filenames
+    branch: master
