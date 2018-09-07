@@ -14,7 +14,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install django-dynamic-filenames
+    pip install django-dynamic-filenames[slugify]
 
 Samples
 ~~~~~~~
