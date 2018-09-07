@@ -1,5 +1,6 @@
 import base64
 import os
+import re
 import uuid
 from string import Formatter
 
@@ -10,40 +11,48 @@ except ImportError:
 
 
 class SlugFormatter(Formatter):
+    format_spec_pattern = re.compile(r'(\.\d+)?([\d\w]+)?')
 
     def format_field(self, value, format_spec):
-        if format_spec == 'slug':
-            return slugify(value)
+        precision, ftype = self.format_spec_pattern.match(format_spec).groups()
+        if precision:
+            precision = int(precision.lstrip('.'))
+        if ftype == 'slug':
+            return slugify(value)[:precision]
         return super().format_field(value=value, format_spec=format_spec)
 
 
 class ExtendedUUID(uuid.UUID):
+    format_spec_pattern = re.compile(r'(\.\d+)?([\d\w]+)?')
 
     def __format__(self, format_spec):
-        if format_spec == '':
-            return str(self)
-        if format_spec == 's':
-            return str(self)
-        if format_spec == 'i':
-            return str(self.int)
-        if format_spec == 'x':
-            return self.hex.lower()
-        if format_spec == 'X':
-            return self.hex.upper()
-        if format_spec == 'base32':
+        precision, ftype = self.format_spec_pattern.match(format_spec).groups()
+        if precision:
+            precision = int(precision.lstrip('.'))
+        if ftype == '':
+            return str(self)[:precision]
+        if ftype == 's':
+            return str(self)[:precision]
+        if ftype == 'i':
+            return str(self.int)[:precision]
+        if ftype == 'x':
+            return self.hex.lower()[:precision]
+        if ftype == 'X':
+            return self.hex.upper()[:precision]
+        if ftype == 'base32':
             return base64.b32encode(
                 self.bytes
-            ).decode('utf-8').rstrip('=\n')
-        if format_spec == 'base64':
+            ).decode('utf-8').rstrip('=\n')[:precision]
+        if ftype == 'base64':
             return base64.urlsafe_b64encode(
                 self.bytes
-            ).decode('utf-8').rstrip('=\n')
+            ).decode('utf-8').rstrip('=\n')[:precision]
         return super().__format__(format_spec)
 
 
 class FilePattern:
     """
-    Write advanced filename patterns using the Format Specification Mini-Language.
+    Write advanced filename patterns using the Format String Syntax.
 
     Basic example:
 
@@ -52,7 +61,7 @@ class FilePattern:
         from django.db import models
         from dynamic_names import FilePattern
 
-        upload_to_pattern = FilePattern('{app_name:.25}/{model_name:.30}/{uuid:base32}{ext}')
+        upload_to_pattern = FilePattern('{app_name:.25}/{model_name:.30}/{uuid:.30base32}{ext}')
 
         class FileModel(models.Model):
             my_file = models.FileField(upload_to=upload_to_pattern)

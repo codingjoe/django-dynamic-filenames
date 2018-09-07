@@ -103,6 +103,11 @@ class TestFilePattern:
             instance=DefaultModel(title='best model'), filename='some_file.txt'
         ) == 'best-model.txt'
 
+    def test_call__slug_precision(self):
+        assert FilePattern(filename_pattern='{instance.title:.4slug}{ext}')(
+            instance=DefaultModel(title='best model'), filename='some_file.txt'
+        ) == 'best.txt'
+
     def test_destruct(self):
         assert FilePattern().deconstruct() == ('dynamic_filenames.FilePattern', [], {})
         assert FilePattern(filename_pattern='{name}{ext}').deconstruct() == (
@@ -157,6 +162,11 @@ class TestExtendedUUID:
         with pytest.raises(TypeError) as e:
             format(guid, 'does not exist')
         assert 'unsupported format string passed to ExtendedUUID.__format__' in str(e)
+
+    def test_precision(self):
+        guid = ExtendedUUID('522d6f3519204b0fb82ae8f558af2749')
+        assert len(format(guid, '.11base64')) == 11
+        assert format(guid, '.11base64') == 'Ui1vNRkgSw-'
 
 
 def test_migrations(db):
