@@ -8,7 +8,7 @@ Syntax](https://docs.python.org/3/library/string.html#format-string-syntax).
 ### Installation
 
 ``` sourceCode bash
-pip install django-dynamic-filenames
+pip install django-dynamic-filenames[slugify]
 ```
 
 ### Samples
