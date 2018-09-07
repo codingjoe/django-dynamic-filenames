@@ -7,7 +7,7 @@ Syntax](https://docs.python.org/3/library/string.html#format-string-syntax).
 
 ### Installation
 
-``` sourceCode bash
+```
 pip install django-dynamic-filenames[slugify]
 ```
 
@@ -15,7 +15,7 @@ pip install django-dynamic-filenames[slugify]
 
 Basic example:
 
-``` sourceCode python
+```
 from django.db import models
 from dynamic_names import FilePattern
 
@@ -91,7 +91,7 @@ You can also use a special slug type specifier, that slugifies strings.
 
 Example:
 
-``` sourceCode python
+```
 from django.db import models
 from dynamic_names import FilePattern
 
