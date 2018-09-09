@@ -24,7 +24,7 @@ Basic example:
 .. code-block:: python
 
     from django.db import models
-    from dynamic_names import FilePattern
+    from dynamic_filenames import FilePattern
 
     upload_to_pattern = FilePattern(
         filename_pattern='{app_name:.25}/{model_name:.30}/{uuid:base32}{ext}'
@@ -104,7 +104,7 @@ Example:
 .. code-block:: python
 
     from django.db import models
-    from dynamic_names import FilePattern
+    from dynamic_filenames import FilePattern
 
     upload_to_pattern = FilePattern(
         filename_pattern='{app_name:.25}/{model_name:.30}/{instance.title:.40slug}{ext}'
