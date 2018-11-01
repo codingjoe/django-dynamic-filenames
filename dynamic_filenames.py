@@ -4,10 +4,14 @@ import re
 import uuid
 from string import Formatter
 
-try:  # use unicode-slugify library if installed
-    from slugify import slugify
-except ImportError:
-    from django.utils.text import slugify
+
+def slugify(value):
+    try:  # use unicode-slugify library if installed
+        from slugify import slugify as _slugify
+        return _slugify(value, only_ascii=True)
+    except ImportError:
+        from django.utils.text import slugify as _slugify
+        return _slugify(value, allow_unicode=False)
 
 
 class SlugFormatter(Formatter):
