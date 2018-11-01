@@ -100,8 +100,8 @@ class TestFilePattern:
 
     def test_call__slug(self):
         assert FilePattern(filename_pattern='{instance.title:slug}{ext}')(
-            instance=DefaultModel(title='best model'), filename='some_file.txt'
-        ) == 'best-model.txt'
+            instance=DefaultModel(title='best model with ünicode'), filename='some_file.txt'
+        ) == 'best-model-with-unicode.txt'
 
     def test_call__slug_precision(self):
         assert FilePattern(filename_pattern='{instance.title:.4slug}{ext}')(
