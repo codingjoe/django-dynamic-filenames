@@ -65,7 +65,7 @@ class FilePattern:
         from django.db import models
         from dynamic_names import FilePattern
 
-        upload_to_pattern = FilePattern('{app_name:.25}/{model_name:.30}/{uuid:.30base32}{ext}')
+        upload_to_pattern = FilePattern('{app_label:.25}/{model_name:.30}/{uuid:.30base32}{ext}')
 
         class FileModel(models.Model):
             my_file = models.FileField(upload_to=upload_to_pattern)
@@ -93,7 +93,7 @@ class FilePattern:
         from dynamic_names import FilePattern
 
         class TitleSlugPattern(FilePattern):
-            filename_pattern = '{app_name:.25}/{model_name:.30}/{instance.title:slug}{ext}'
+            filename_pattern = '{app_label:.25}/{model_name:.30}/{instance.title:slug}{ext}'
 
         class FileModel(models.Model):
             title = models.CharField(max_length=100)
