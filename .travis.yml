@@ -5,7 +5,9 @@ python: 3.7
 cache: pip
 env:
   matrix:
-  - TOXENV=django-slugify
+  - TOXENV=django22-slugify
+  - TOXENV=django30-slugify
+  - TOXENV=django32-slugify
   - TOXENV=unicode-slugify
 install: pip install -U pip tox codecov
 script: tox -e $TOXENV
