@@ -1,1 +1,5 @@
-Django>=1.11
+bandit==1.7.0
+black==21.9b0
+flake8==3.9.2
+isort==5.9.3
+pydocstyle==6.1.1
