@@ -8,49 +8,53 @@ from string import Formatter
 def slugify(value):
     try:  # use unicode-slugify library if installed
         from slugify import slugify as _slugify
+
         return _slugify(value, only_ascii=True)
     except ImportError:
         from django.utils.text import slugify as _slugify
+
         return _slugify(value, allow_unicode=False)
 
 
 class SlugFormatter(Formatter):
-    format_spec_pattern = re.compile(r'(\.\d+)?([\d\w]+)?')
+    format_spec_pattern = re.compile(r"(\.\d+)?([\d\w]+)?")
 
     def format_field(self, value, format_spec):
         precision, ftype = self.format_spec_pattern.match(format_spec).groups()
         if precision:
-            precision = int(precision.lstrip('.'))
-        if ftype == 'slug':
+            precision = int(precision.lstrip("."))
+        if ftype == "slug":
             return slugify(value)[:precision]
         return super().format_field(value=value, format_spec=format_spec)
 
 
 class ExtendedUUID(uuid.UUID):
-    format_spec_pattern = re.compile(r'(\.\d+)?([\d\w]+)?')
+    format_spec_pattern = re.compile(r"(\.\d+)?([\d\w]+)?")
 
     def __format__(self, format_spec):
         precision, ftype = self.format_spec_pattern.match(format_spec).groups()
         if precision:
-            precision = int(precision.lstrip('.'))
-        if ftype == '':
+            precision = int(precision.lstrip("."))
+        if ftype == "":
             return str(self)[:precision]
-        if ftype == 's':
+        if ftype == "s":
             return str(self)[:precision]
-        if ftype == 'i':
+        if ftype == "i":
             return str(self.int)[:precision]
-        if ftype == 'x':
+        if ftype == "x":
             return self.hex.lower()[:precision]
-        if ftype == 'X':
+        if ftype == "X":
             return self.hex.upper()[:precision]
-        if ftype == 'base32':
-            return base64.b32encode(
-                self.bytes
-            ).decode('utf-8').rstrip('=\n')[:precision]
-        if ftype == 'base64':
-            return base64.urlsafe_b64encode(
-                self.bytes
-            ).decode('utf-8').rstrip('=\n')[:precision]
+        if ftype == "base32":
+            return (
+                base64.b32encode(self.bytes).decode("utf-8").rstrip("=\n")[:precision]
+            )
+        if ftype == "base64":
+            return (
+                base64.urlsafe_b64encode(self.bytes)
+                .decode("utf-8")
+                .rstrip("=\n")[:precision]
+            )
         return super().__format__(format_spec)
 
 
@@ -71,7 +75,6 @@ class FilePattern:
             my_file = models.FileField(upload_to=upload_to_pattern)
 
     Args:
-
         ext: File extension including the dot.
         name: Filename excluding the folders.
         model_name: Name of the Django model.
@@ -103,7 +106,7 @@ class FilePattern:
 
     formatter = SlugFormatter()
 
-    filename_pattern = '{name}{ext}'
+    filename_pattern = "{name}{ext}"
 
     def __call__(self, instance, filename):
         """Return filename based for given instance and filename."""
@@ -111,12 +114,12 @@ class FilePattern:
         path, ext = os.path.splitext(filename)
         path, name = os.path.split(path)
         defaults = {
-            'ext': ext,
-            'name': name,
-            'model_name': instance._meta.model_name,
-            'app_label': instance._meta.app_label,
-            'uuid': self.get_uuid(),
-            'instance': instance,
+            "ext": ext,
+            "name": name,
+            "model_name": instance._meta.model_name,
+            "app_label": instance._meta.app_label,
+            "uuid": self.get_uuid(),
+            "instance": instance,
         }
         defaults.update(self.override_values)
         return self.formatter.format(self.filename_pattern, **defaults)
@@ -124,7 +127,9 @@ class FilePattern:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
         override_values = kwargs.copy()
-        self.filename_pattern = override_values.pop('filename_pattern', self.filename_pattern)
+        self.filename_pattern = override_values.pop(
+            "filename_pattern", self.filename_pattern
+        )
         self.override_values = override_values
 
     def deconstruct(self):

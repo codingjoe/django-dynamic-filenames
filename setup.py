@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(
-    setup_requires=['pbr'],
-    py_modules=['dynamic_filenames'],
-    pbr=True,
+    name="django-dynamic-filenames",
+    py_modules=["dynamic_filenames"],
+    use_scm_version=True,
 )
