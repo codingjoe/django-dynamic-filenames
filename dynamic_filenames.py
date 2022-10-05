@@ -3,6 +3,7 @@ import os
 import re
 import uuid
 from string import Formatter
+
 from django.utils.text import slugify
 
 
