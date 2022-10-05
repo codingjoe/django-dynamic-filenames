@@ -3,17 +3,7 @@ import os
 import re
 import uuid
 from string import Formatter
-
-
-def slugify(value):
-    try:  # use unicode-slugify library if installed
-        from slugify import slugify as _slugify
-
-        return _slugify(value, only_ascii=True)
-    except ImportError:
-        from django.utils.text import slugify as _slugify
-
-        return _slugify(value, allow_unicode=False)
+from django.utils.text import slugify
 
 
 class SlugFormatter(Formatter):
@@ -24,7 +14,7 @@ class SlugFormatter(Formatter):
         if precision:
             precision = int(precision.lstrip("."))
         if ftype == "slug":
-            return slugify(value)[:precision]
+            return slugify(value, allow_unicode=False)[:precision]
         return super().format_field(value=value, format_spec=format_spec)
 
 
