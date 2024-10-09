@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         lint-command:
-          - "bandit dynamic_filenames.py"
+          - "bandit ."
           - "black --check --diff ."
           - "flake8 ."
           - "isort --check-only --diff ."
@@ -25,10 +25,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.x"
           cache: 'pip'
-          cache-dependency-path: 'requirements.txt'
-      - run: python -m pip install -r requirements.txt
+          cache-dependency-path: 'pyproject.toml'
+      - run: python -m pip install -e .[lint]
       - run: ${{ matrix.lint-command }}
 
   readme:
@@ -37,10 +37,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.x"
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip setuptools wheel twine readme-renderer
-      - run: python setup.py sdist bdist_wheel
+        run: python -m pip install --upgrade pip build wheel twine readme-renderer
+      - run: python -m build --sdist --wheel
       - run: python -m twine check dist/*
       - uses: actions/upload-artifact@v4
         with:
@@ -68,13 +68,11 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Upgrade Python setuptools
-      run: python -m pip install --upgrade pip setuptools wheel codecov
-    - run: python setup.py develop
+    - run: python -m pip install .[test]
     - name: Install Django ${{ matrix.django-version }}
       run: python -m pip install "django~=${{ matrix.django-version }}.0"
     - name: Run tests
-      run: python setup.py test
+      run: python -m pytest
     - run: codecov
 
   analyze:

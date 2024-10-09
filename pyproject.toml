@@ -1,0 +1,87 @@
+[build-system]
+requires = ["flit_core>=3.2", "flit_scm", "wheel"]
+build-backend = "flit_scm:buildapi"
+
+[project]
+name = "django-dynamic-filenames"
+authors = [
+  { name = "Johannes Maron", email = "johannes@maron.family" },
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["django", "django-storages", "file", "filenames", "django-pictures"]
+dynamic = ["version", "description"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Topic :: Software Development",
+  "Programming Language :: JavaScript",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Framework :: Django :: 5.1",
+]
+requires-python = ">=3.9"
+dependencies = ["django>=4.2.0"]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov",
+  "pytest-django",
+]
+lint = [
+  "bandit==1.7.7",
+  "black==23.12.1",
+  "flake8==7.0.0",
+  "isort==5.13.2",
+  "pydocstyle[toml]==6.3.0",
+]
+
+[project.urls]
+Project-URL = "https://github.com/codingjoe/django-dynamic-filenames"
+Changelog = "https://github.com/codingjoe/django-dynamic-filenames/releases"
+Source = "https://github.com/codingjoe/django-dynamic-filenames"
+Documentation = "https://github.com/codingjoe/django-dynamic-filenames#django-dynamic-filenames"
+Issue-Tracker = "https://github.com/codingjoe/django-dynamic-filenames/issues"
+
+[tool.flit.module]
+name = "dynamic_filenames"
+
+[tool.setuptools_scm]
+write_to = "dynamic_filenames/_version.py"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov --tb=short -rxs"
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "tests.testapp.settings"
+
+[tool.coverage.run]
+source = ["django_esm"]
+
+[tool.coverage.report]
+show_missing = true
+omit = ["dynamic_filenames/_version.py", "tests/*"]
+
+[tool.isort]
+atomic = true
+line_length = 88
+known_first_party = "dynamic_filenames, tests"
+include_trailing_comma = true
+default_section = "THIRDPARTY"
+combine_as_imports = true
+
+[tool.pydocstyle]
+add_ignore = "D1"
