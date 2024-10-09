@@ -1,4 +1,5 @@
 """Write advanced filename patterns using the Format String Syntax."""
+
 import base64
 import os
 import re
