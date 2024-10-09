@@ -72,7 +72,7 @@ jobs:
       run: python -m pip install "django~=${{ matrix.django-version }}.0"
     - name: Run tests
       run: python -m pytest
-    - run: codecov
+    - uses: codecov/codecov-action@v4
 
   analyze:
     name: CodeQL Analyze
