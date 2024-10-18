@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 import pytest
@@ -176,6 +177,17 @@ class TestFilePattern:
                 instance=DefaultModel(title="best model"), filename="some_file.txt"
             )
             == "522d6f3519204b0fb82ae8f558af2749.txt"
+        )
+
+    def test_date(self):
+        assert (
+            FilePattern(filename_pattern="{instance.created:%Y-%m-%d}{ext}")(
+                instance=DefaultModel(
+                    title="best model", created=datetime.date(2021, 9, 10)
+                ),
+                filename="some_file.txt",
+            )
+            == "2021-09-10.txt"
         )
 
 

@@ -7,7 +7,7 @@ Syntax](https://docs.python.org/3/library/string.html#format-string-syntax).
 
 ### Installation
 
-``` bash
+```bash
 pip install django-dynamic-filenames
 ```
 
@@ -15,16 +15,17 @@ pip install django-dynamic-filenames
 
 Basic example:
 
-``` python
+```python
 from django.db import models
 from dynamic_filenames import FilePattern
 
 upload_to_pattern = FilePattern(
-    filename_pattern='{app_label:.25}/{model_name:.30}/{uuid:base32}{ext}'
+    filename_pattern='{app_label:.25}/{model_name:.30}/{instance.created:%Y-%m-%d}/{uuid:base32}{ext}'
 )
 
 class FileModel(models.Model):
     my_file = models.FileField(upload_to=upload_to_pattern)
+    created = models.DateTimeField(auto_now_add=True)
 ```
 
 Auto slug example:
@@ -109,7 +110,7 @@ You can also use a special slug type specifier, that slugifies strings.
 
 Example:
 
-``` python
+```python
 from django.db import models
 from dynamic_filenames import FilePattern
 
