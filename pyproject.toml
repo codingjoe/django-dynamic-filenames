@@ -68,7 +68,7 @@ testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "tests.testapp.settings"
 
 [tool.coverage.run]
-source = ["django_esm"]
+source = ["dynamic_filenames"]
 
 [tool.coverage.report]
 show_missing = true

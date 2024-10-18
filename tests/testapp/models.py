@@ -10,3 +10,4 @@ upload_to_pattern = FilePattern(
 class DefaultModel(models.Model):
     title = models.CharField(max_length=100, default="hello goodby")
     file_field = models.FileField(upload_to=upload_to_pattern)
+    created = models.DateTimeField(auto_now_add=True)
