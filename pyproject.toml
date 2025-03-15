@@ -44,7 +44,7 @@ lint = [
   "bandit==1.8.3",
   "black==25.1.0",
   "flake8==7.1.2",
-  "isort==6.0.0",
+  "isort==6.0.1",
   "pydocstyle[toml]==6.3.0",
 ]
 
@@ -81,6 +81,7 @@ known_first_party = "dynamic_filenames, tests"
 include_trailing_comma = true
 default_section = "THIRDPARTY"
 combine_as_imports = true
+skip = ["dynamic_filenames/_version.py"]
 
 [tool.pydocstyle]
 add_ignore = "D1"
