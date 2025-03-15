@@ -81,6 +81,7 @@ known_first_party = "dynamic_filenames, tests"
 include_trailing_comma = true
 default_section = "THIRDPARTY"
 combine_as_imports = true
+skip = ["dynamic_filenames/_version.py"]
 
 [tool.pydocstyle]
 add_ignore = "D1"
