@@ -20,8 +20,9 @@ from django.db import models
 from dynamic_filenames import FilePattern
 
 upload_to_pattern = FilePattern(
-    filename_pattern='{app_label:.25}/{model_name:.30}/{instance.created:%Y-%m-%d}/{uuid:base32}{ext}'
+    filename_pattern="{app_label:.25}/{model_name:.30}/{instance.created:%Y-%m-%d}/{uuid:base32}{ext}"
 )
+
 
 class FileModel(models.Model):
     my_file = models.FileField(upload_to=upload_to_pattern)
@@ -36,73 +37,75 @@ Auto slug example:
 
 `ext`
 
-:   File extension including the dot.
+: File extension including the dot.
 
 `name`
 
-:   Filename excluding the folders.
+: Filename excluding the folders.
 
 `model_name`
 
-:   Name of the Django model.
+: Name of the Django model.
 
 `app_label`
 
-:   App label of the Django model.
+: App label of the Django model.
 
 `instance`
 
-:   Instance of the model before it has been saved. You may not have a
-    primary key at this point.
+: Instance of the model before it has been saved. You may not have a
+primary key at this point.
 
 `uuid`
 
-:   UUID version 4 that supports multiple type specifiers. The UUID will
-    be the same should you use it twice in the same string, but
-    different on each invocation of the `upload_to` callable.
+: UUID version 4 that supports multiple type specifiers. The UUID will
+be the same should you use it twice in the same string, but
+different on each invocation of the `upload_to` callable.
 
-    The type specifiers allow you to format the UUID in different ways,
-    e.g. `{uuid:x}` will give you a with a hexadecimal UUID.
+```
+The type specifiers allow you to format the UUID in different ways,
+e.g. `{uuid:x}` will give you a with a hexadecimal UUID.
 
-    The supported type specifiers are:
+The supported type specifiers are:
 
-    `s`
+`s`
 
-    :   String representation of a UUID including dashes.
+:   String representation of a UUID including dashes.
 
-    `i`
+`i`
 
-    :   Integer representation of a UUID. Like to `UUID.int`.
+:   Integer representation of a UUID. Like to `UUID.int`.
 
-    `x`
+`x`
 
-    :   Hexadecimal (Base16) representation of a UUID. Like to
-        `UUID.hex`.
+:   Hexadecimal (Base16) representation of a UUID. Like to
+    `UUID.hex`.
 
-    `X`
+`X`
 
-    :   Upper case hexadecimal representation of a UUID. Like to
-        `UUID.hex`.
+:   Upper case hexadecimal representation of a UUID. Like to
+    `UUID.hex`.
 
-    `base32`
+`base32`
 
-    :   Base32 representation of a UUID without padding.
+:   Base32 representation of a UUID without padding.
 
-    `base64`
+`base64`
 
-    :   Base64 representation of a UUID without padding.
+:   Base64 representation of a UUID without padding.
 
-        :::: warning
-        ::: title
-        Warning
-        :::
+    :::: warning
+    ::: title
+    Warning
+    :::
 
-        Not all file systems support Base64 file names.
-        ::::
+    Not all file systems support Base64 file names.
+    ::::
 
-    All type specifiers also support precisions to cut the string, e.g.
-    `{{uuid:.2base32}}` would only return the first 2 characters of a
-    Base32 encoded UUID.
+All type specifiers also support precisions to cut the string, e.g.
+`{{uuid:.2base32}}` would only return the first 2 characters of a
+Base32 encoded UUID.
+```
 
 ### Type specifiers
 
@@ -115,8 +118,9 @@ from django.db import models
 from dynamic_filenames import FilePattern
 
 upload_to_pattern = FilePattern(
-    filename_pattern='{app_label:.25}/{model_name:.30}/{instance.title:.40slug}{ext}'
+    filename_pattern="{app_label:.25}/{model_name:.30}/{instance.title:.40slug}{ext}"
 )
+
 
 class FileModel(models.Model):
     title = models.CharField(max_length=100)

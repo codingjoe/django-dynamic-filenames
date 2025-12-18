@@ -8,7 +8,7 @@ from string import Formatter
 
 from django.utils.text import slugify
 
-from . import _version  # noqa
+from . import _version
 
 __version__ = _version.__version__
 VERSION = _version.VERSION_TUPLE
@@ -132,7 +132,7 @@ class FilePattern:
 
     def deconstruct(self):
         """Destruct callable to support Django migrations."""
-        path = "%s.%s" % (self.__class__.__module__, self.__class__.__name__)
+        path = f"{self.__class__.__module__}.{self.__class__.__name__}"
         return path, [], self.kwargs
 
     @staticmethod
