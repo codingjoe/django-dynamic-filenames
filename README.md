@@ -1,13 +1,13 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/codingjoe/django-django-dynamic-filenames/raw/main/images/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/codingjoe/django-django-dynamic-filenames/raw/main/images/logo-light.svg">
-    <img alt="Django DynNames: Advanced filename patterns using f-Strings" src="https://github.com/codingjoe/django-django-dynamic-filenames/raw/main/images/logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-light.svg">
+    <img alt="Django DynNames: Advanced filename patterns using f-Strings" src="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-light.svg">
   </picture>
 <br>
-  <a href="https://github.com/codingjoe/django-django-dynamic-filenames?tab=readme-ov-file">Documentation</a> |
-  <a href="https://github.com/codingjoe/django-django-dynamic-filenames/issues/new/choose">Issues</a> |
-  <a href="https://github.com/codingjoe/django-django-dynamic-filenames/releases">Changelog</a> |
+  <a href="https://github.com/codingjoe/django-dynamic-filenames?tab=readme-ov-file">Documentation</a> |
+  <a href="https://github.com/codingjoe/django-dynamic-filenames/issues/new/choose">Issues</a> |
+  <a href="https://github.com/codingjoe/django-dynamic-filenames/releases">Changelog</a> |
   <a href="https://github.com/sponsors/codingjoe">Funding</a> 💚
 </p>
 
