@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" font-family="Segoe UI, system-ui, sans-serif" viewBox="0 0 1280 640">
+  <circle cx="260" cy="320" r="200" fill="#092e20"/>
+  <g fill="none" stroke="#f1fff7" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M120 174h288v288H120z"/>
+    <path stroke-width="24" d="M204 222a24 24 0 0 0-24 24v36a24 36 0 0 1-24 36 24 36 0 0 1 24 36v36a24 24 0 0 0 24 24M324 222a24 24 0 0 1 24 24v36a24 36 0 0 0 24 36 24 36 0 0 0-24 36v36a24 24 0 0 1-24 24"/>
+  </g>
+  <text x="243" y="70" fill="#092e20" font-size="64" font-weight="bold" transform="matrix(1.6 0 0 1.6 120 120)">
+    Django
+  </text>
+  <text x="240" y="174" fill="#222" font-size="120" font-weight="bold" transform="matrix(1.6 0 0 1.6 120 120)">
+    DynFN
+  </text>
+  <text x="244" y="220" font-size="20" font-style="italic" transform="matrix(1.6 0 0 1.6 120 120)">
+    Advanced filename patterns using f-Strings
+  </text>
+</svg>
