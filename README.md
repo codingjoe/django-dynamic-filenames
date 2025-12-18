@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-light.svg">
-    <img alt="Django DynNames: Advanced filename patterns using f-Strings" src="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-light.svg">
+    <img alt="Django DynFN: Advanced filename patterns using f-Strings" src="https://github.com/codingjoe/django-dynamic-filenames/raw/main/images/logo-light.svg">
   </picture>
 <br>
   <a href="https://github.com/codingjoe/django-dynamic-filenames?tab=readme-ov-file">Documentation</a> |
