@@ -105,3 +105,6 @@ venv.bak/
 
 # setuptools_scm
 _version.py
+
+# uv
+uv.lock
