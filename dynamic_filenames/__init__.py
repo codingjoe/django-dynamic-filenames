@@ -49,7 +49,8 @@ class ExtendedUUID(uuid.UUID):
             )
         if ftype == "base64":
             return (
-                base64.urlsafe_b64encode(self.bytes)
+                base64
+                .urlsafe_b64encode(self.bytes)
                 .decode("utf-8")
                 .rstrip("=\n")[:precision]
             )
