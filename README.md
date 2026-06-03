@@ -15,6 +15,10 @@
 
 Write advanced filename patterns using the [Format String Syntax](https://docs.python.org/3/library/string.html#format-string-syntax).
 
+## Sponsors
+
+[![Sponsors](https://django.the-box.sh/sponsors/codingjoe/django-dynamic-filenames.svg)](https://github.com/sponsors/codingjoe)
+
 ## Getting Started
 
 ### Installation
