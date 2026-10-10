@@ -16,6 +16,9 @@ jobs:
         with:
           path: dist/*
   pytest:
+    permissions:
+      contents: read
+      id-token: write
     needs:
       - dist
     runs-on: ubuntu-latest
@@ -35,5 +38,5 @@ jobs:
       - run: uv run --with django~=${{ matrix.django-version }}.0 pytest -m "not selenium"
       - uses: codecov/codecov-action@v7
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           flags: python-${{ matrix.python-version }}-django-${{ matrix.django-version }}
