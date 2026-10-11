@@ -4,6 +4,7 @@ import base64
 import os
 import re
 import uuid
+from pathlib import Path
 from string import Formatter
 
 from django.utils.text import slugify
@@ -110,11 +111,10 @@ class FilePattern:
     def __call__(self, instance, filename):
         """Return filename based for given instance and filename."""
         # UUID needs to be set on call, not per instance to avoid state leakage.
-        path, ext = os.path.splitext(filename)
-        path, name = os.path.split(path)
+        file_path = Path(filename)
         defaults = {
-            "ext": ext,
-            "name": name,
+            "ext": file_path.suffix,
+            "name": file_path.stem,
             "model_name": instance._meta.model_name,
             "app_label": instance._meta.app_label,
             "uuid": self.get_uuid(),
